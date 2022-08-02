@@ -1,0 +1,82 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Sphinx-Book-Theme\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: YHDSL\n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.1.1\n"
+
+msgid "By the"
+msgstr "By the"
+
+msgid "By"
+msgstr "作者"
+
+msgid "Contents"
+msgstr "目录"
+
+msgid "Copyright"
+msgstr "版权所有"
+
+msgid "Download notebook file"
+msgstr "下载 Notebook文件"
+
+msgid "Download source file"
+msgstr "下载源文件"
+
+msgid "Download this page"
+msgstr "下载当前页面"
+
+msgid "Edit this page"
+msgstr "编辑当前页面"
+
+msgid "Fullscreen mode"
+msgstr "全屏模式"
+
+msgid "Last updated on"
+msgstr "最后更新于"
+
+msgid "Launch"
+msgstr "Launch"
+
+msgid "next page"
+msgstr "下一页"
+
+msgid "Open an issue"
+msgstr "反馈 bug"
+
+msgid "open issue"
+msgstr "Issues"
+
+msgid "previous page"
+msgstr "上一页"
+
+msgid "Print to PDF"
+msgstr "导出 PDF文件"
+
+msgid "repository"
+msgstr "GitHub"
+
+msgid "Search the docs ..."
+msgstr "快速搜索"
+
+msgid "Search this book..."
+msgstr "快速搜索"
+
+msgid "Source repository"
+msgstr "源代码仓库"
+
+msgid "Sphinx Book Theme"
+msgstr "Sphinx Book Theme"
+
+msgid "Theme by the"
+msgstr "Theme by the"
+
+msgid "Toggle navigation"
+msgstr "导航栏切换"

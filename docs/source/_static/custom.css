@@ -1,0 +1,38 @@
+/* tabs */
+[role="tablist"] {
+    border-bottom: 1px solid #B3B3B3 !important;
+}
+
+.sphinx-tabs-tab {
+    color: #0071BC !important;
+}
+
+.sphinx-tabs-tab[aria-selected="true"] {
+    border: 1px solid #B3B3B3 !important;
+}
+
+.sphinx-tabs-panel {
+    border: 1px solid #B3B3B3 !important;
+    border-top: 0 !important;
+}
+
+/* sphinx-book-theme */
+:root {
+    --pst-color-inline-code:195, 92, 93 !important;
+}
+
+.admonition.seealso {
+    border-color: #ffc107 !important;
+}
+
+.admonition.seealso .admonition-title {
+    background-color: #fff9e6 !important;
+}
+
+.admonition.seealso .admonition-title:before {
+    color: #ffc107 !important;
+}
+
+.highlight .gt {
+    color: #ef2929 !important;
+}
