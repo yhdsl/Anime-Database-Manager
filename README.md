@@ -5,27 +5,27 @@
         <img src="./mini_logo.png" alt="Logo"/>
     </div>
     <div>
-        <a href="https://github.com/yhdsl/Anime-Database-Manager/issues">
+        <a href="https://github.com/yhdsl/Anime-Database-Manager/issues" target="_blank">
             <img src="https://img.shields.io/github/issues/yhdsl/Anime-Database-Manager" alt="GitHub Issues">
         </a>
-        <a href="https://github.com/yhdsl/Anime-Database-Manager/pulls">
+        <a href="https://github.com/yhdsl/Anime-Database-Manager/pulls" target="_blank">
             <img src="https://img.shields.io/github/issues-pr/yhdsl/Anime-Database-Manager" alt="GitHub Pull Requests">
         </a>
-        <a href="https://Anime-Database-Manager.readthedocs.io/zh_CN/latest/?badge=latest">
-            <img src="https://readthedocs.org/projects/Anime-Database-Manager/badge/?version=latest" alt="Documentation Status"/>
+        <a href="https://anime-database-manager.readthedocs.io/zh_CN/latest/?badge=latest" target="_blank">
+            <img src="https://readthedocs.org/projects/anime-database-manager/badge/?version=latest" alt="Documentation Status"/>
         </a>
     </div>
     <div>
-        <a href="https://www.python.org/downloads/">
+        <a href="https://www.python.org/downloads/" target="_blank">
             <img src="https://img.shields.io/badge/python-3.10-blue" alt="Python Version">
         </a>
-        <a href="https://github.com/yhdsl/Anime-Database-Manager">
+        <a href="https://github.com/yhdsl/Anime-Database-Manager" target="_blank">
             <img src="https://img.shields.io/badge/platform-Windows-lightgrey" alt="Platform">
         </a>
-        <a href="https://github.com/yhdsl/Anime-Database-Manager/blob/main/LICENSE">
+        <a href="https://github.com/yhdsl/Anime-Database-Manager/blob/main/LICENSE" target="_blank">
             <img src="https://img.shields.io/github/license/yhdsl/Anime-Database-Manager" alt="GitHub License">
         </a>
-        <a href="https://gitmoji.dev">
+        <a href="https://gitmoji.dev" target="_blank">
           <img src="https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg" alt="Gitmoji">
         </a>
     </div>
