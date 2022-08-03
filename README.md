@@ -1,3 +1,5 @@
+**该分支为测试分支，用于临时测试代码用途，随时会发生修改，请勿使用该分支进行开发**
+
 # Anime Database Manager (ADM)
 
 <div align="center">
