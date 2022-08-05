@@ -4,7 +4,7 @@ python-magic>=0.4.27
 python-magic-bin>=0.4.14
 pywin32>=304
 
-Django>=4.0.6
+Django>=4.1.0
 
 coverage>=6.4.2
 pytest>=7.1.2
