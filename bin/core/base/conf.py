@@ -54,16 +54,23 @@ def get_version_dict(version: str) -> dict[str, str | None]:
     """
     用于拆分版本号
 
-    其中版本号格式为 `major.minor.micro-release_name.release_level+ex` ，
-    其中后三个内容可以省略，匹配时忽略大小写
+    其中版本号的格式如下::
+
+        major.minor.micro-release_name.release_level+ex
+
+    其中后三个内容可以省略，匹配时会忽略大小写。
+
+    一个满足要求的版本号如下::
+
+        0.1.0-test.0+ex
 
     :param version:
-        版本号，其格式请参考语义化标准与正则语句
+        版本号字符串，其格式请参考: `语义化版本 <https://semver.org/lang/zh-CN/>`__
 
     :type version: str
 
     :return:
-        包含匹配内容的字典，键与版本号格式名称一致，缺省为 None，注意获取的值均为 str 格式
+        一个包含匹配结果的字典，键与版本号格式名称一致，缺省则为 None，注意获取的值均为 **str** 格式
     :rtype: dict[str, str | None]
 
     :raise ValueError:
@@ -87,7 +94,11 @@ def extend(var: list | set | dict, value, *, key=None):
     """
     由于列表，集合等没有一个统一名称的拓展接口，该函数对其进行了统一的封装
 
-    目前支持列表，集合，字典
+    目前支持如下内容
+
+    * 列表 (list)
+    * 集合 (tuple)
+    * 字典 (dict)
 
     :param var:
         待拓展的变量
@@ -143,16 +154,25 @@ class NeedHookError(NotImplementedError):
 
 class Singleton:
     """
-    线程安全的单例类
+    一个线程安全的单例类
     """
     _singleton = None
     _singleton_lock = threading.Lock()
+
+    _init_bool = False
+    _init_lock = threading.Lock()
 
     def __new__(cls, *args, **kwargs):
         with cls._singleton_lock:
             if cls._singleton is None:
                 cls._singleton = super().__new__(cls)
         return cls._singleton
+
+    def __init__(self, *args, **kwargs):
+        with self._init_lock:
+            if not self._init_bool:
+                self._init_bool = True
+        return
 
 
 class Data:
@@ -254,10 +274,9 @@ class Conf(Singleton):
     默认会开启类型检测，防止类型不一致，但是如果子类未提供初始类属性，
     或者初始类属性包含多个类型，则类型检测将被关闭
     """
-    _init_type = False  # 防止重复创建实例时执行多个初始化代码
 
     def __init__(self):
-        if not self._init_type:
+        if not self._init_bool:
             self._disabled_tup = ('get', 'get_data', 'get_lock',
                                   'get_types', 'set_types', 'get_disabled_tup',
                                   'new', 'state', 'dump', 'load')  # 内置函数名称，不可作为配置名称
@@ -282,8 +301,7 @@ class Conf(Singleton):
             del self._class_attrs
             del self._types_set
 
-            self._init_type = True
-
+        super().__init__()
         return
 
     def get(self, key: str) -> _Any:
@@ -321,7 +339,7 @@ class Conf(Singleton):
 
     def get_lock(self) -> threading.Lock:
         """
-        返回配置类对应的锁
+        返回配置类对应的线程锁
         """
         return self._data_lock
 
@@ -335,7 +353,7 @@ class Conf(Singleton):
         """
         设置配置允许的类型
 
-        默认为实例检测
+        *默认为实例检测*
         """
         self._types = types
         return
@@ -343,12 +361,16 @@ class Conf(Singleton):
     def get_disabled_tup(self) -> tuple:
         """
         返回不允许配置命名的名称元组
+
+        它们往往是以下划线开头或者全小写的，使用枚举命名方法通常不会遇到冲突
         """
         return self._disabled_tup
 
     def new(self, name: str, value, *, readonly=False):
         """
         添加新的配置
+
+        如果没有设置新增只读属性的需求，请改用属性操作或容器操作
 
         :param name:
             配置名称
@@ -497,13 +519,15 @@ class Conf(Singleton):
 
 class Project(Enum):
     """
-    项目基本信息
+    项目的基本信息
+
+    用于项目的信息面板
     """
-    NAME = 'Anime Database Manager'
-    SHORT_NAME = 'ADM'
-    AUTHOR = 'YHDSL'
-    VERSION = '0.1.0-test.0'
-    URL = 'https://github.com/yhdsl/Anime-Database-Manager'
+    NAME = 'Anime Database Manager'  #: 项目的名称
+    SHORT_NAME = 'ADM'  #: 项目的名称的简写
+    AUTHOR = 'YHDSL'  #: 项目作者
+    VERSION = '0.1.0-test.0'  #: 当前的版本号，注意这是整个项目的版本号
+    URL = 'https://github.com/yhdsl/Anime-Database-Manager'  # 项目的主页
 
 
 _version_dict = get_version_dict(Project.VERSION.value)
@@ -511,16 +535,18 @@ _version_dict = get_version_dict(Project.VERSION.value)
 
 class Version(Enum):
     """
-    项目版本信息
-    """
-    VERSION = Project.VERSION.value
+    项目的版本信息
 
-    MAJOR = _version_dict['major']
-    MINOR = _version_dict['minor']
-    MICRO = _version_dict['micro']
-    RELEASE_NAME = _version_dict['release_name']
-    RELEASE_LEVEL = _version_dict['release_level']
-    EX = _version_dict['ex']
+    用于项目的信息面板或需要版本号判别的情况
+    """
+    VERSION = Project.VERSION.value  #: 项目的版本号，这是 Project 配置类中同名配置的镜像
+
+    MAJOR = _version_dict['major']  #: 项目的主版本号，在及其重大的情况下加一
+    MINOR = _version_dict['minor']  #: 项目的次版本号，在功能性更改的情况下加一
+    MICRO = _version_dict['micro']  #: 项目的小版本号，在修复性的情况下加一
+    RELEASE_NAME = _version_dict['release_name']  #: 项目的状态，限定在 test, alpha, beta, rc, release 之中
+    RELEASE_LEVEL = _version_dict['release_level']  #: 项目状态的版本号
+    EX = _version_dict['ex']  #: 额外的说明信息
 
 
 del _version_dict
@@ -530,7 +556,7 @@ class BuiltinPlugins(Enum):
     """
     内置插件名称
 
-    已排除隐藏的插件
+    用于判别插件是否是内置的
     """
     pass
 
@@ -539,7 +565,7 @@ class Path(Enum):
     """
     用于路径类型检测的定义
 
-    与官方定义一致
+    其与官方的定义完全一致
     """
     StrPath = _Union[str, os.PathLike[str]]
     BytesPath = _Union[bytes, os.PathLike[bytes]]
@@ -554,9 +580,11 @@ class _Dump(Conf):
     """
     储存需要序列化的配置类
 
-    默认配置应当只有 Dump 一个
+    默认配置应当只有 Dump 一个，其他需要序列化支持的配置类应当在其初始化后再写入
+
+    **类型检测为** :class:`core.base.conf.Conf`
     """
-    Dump = None
+    Dump = None  #: 该类自身的实例，必须为第一个配置以便在序列化时进行读取
 
     def dump(self, file):
         dump_data = {key: value.__class__ for key, value in self._data.items()}  # 储存数据对应的类
@@ -593,14 +621,16 @@ class _RunInfo(Conf):
     """
     软件运行时所需的信息
 
-    除非特殊情况，请勿修改该类的内容
+    除非特殊情况，否则请勿修改该类的配置
+
+    **无类型检测**
     """
-    BIN = str(pathlib.Path(__file__).absolute().parent.parent.parent.name)  # bin
-    CORE = str(pathlib.Path(__file__).absolute().parent.parent.name)  # core
+    BIN = str(pathlib.Path(__file__).absolute().parent.parent.parent.name)  #: 最外层文件夹的名称，默认为 `bin`
+    CORE = str(pathlib.Path(__file__).absolute().parent.parent.name)  #: 核心部分所在文件夹的名称，默认为 `core`
 
-    ADDRESS = str(pathlib.Path(__file__).absolute().parent.parent.parent)  # bin 文件夹地址
+    ADDRESS = str(pathlib.Path(__file__).absolute().parent.parent.parent)  #: bin 文件夹的绝对地址，可用于重定向或虚拟化
 
-    SYSTEM = platform.system()
+    SYSTEM = platform.system()  #: 当前运行系统的平台名称
 
 
 RunInfo = _RunInfo()
@@ -616,17 +646,21 @@ class _Folder(Conf):
     如果元组内已有绝对地址，则覆盖默认设置
 
     该配置类下的所有文件夹均会在运行前被创建
+
+    **类型检测为** tuple
+
+    **注意返回的是 str**
     """
-    ASSETS = ('core', 'assets')
-    LOGS = ('logs',)
-    PLUGINS = ('plugins',)
-    PROFILES = ('profiles',)
-    BACKUP = ('profiles', 'backup')
-    CACHE = ('profiles', 'cache')
-    CONFIG = ('profiles', 'config')
-    DATABASE = ('profiles', 'database')
-    TEMP = ('profiles', 'temp')
-    TEMPLATES = ('profiles', 'templates')
+    ASSETS = ('core', 'assets')  #: 核心部分资源文件夹
+    LOGS = ('logs',)  #: 日志文件夹
+    PLUGINS = ('plugins',)  #: 插件文件夹
+    PROFILES = ('profiles',)  #: 用户配置文件夹
+    BACKUP = ('profiles', 'backup')  #: 备份文件夹
+    CACHE = ('profiles', 'cache')  #: 缓存文件夹
+    CONFIG = ('profiles', 'config')  #: 配置文件夹
+    DATABASE = ('profiles', 'database')  #: 数据库文件夹
+    TEMP = ('profiles', 'temp')  #: 临时文件夹
+    TEMPLATES = ('profiles', 'templates')  #: 模板文件夹
 
     def get(self, key: str) -> str:
         return os.path.join(RunInfo.ADDRESS, *self.get_data()[str(key)])
@@ -640,11 +674,15 @@ class _DBToINIAddress(Conf):
     """
     INI文件对应的DB数据库地址
 
-    储存格式要求与 Folder 配置相同
+    储存格式的要求与 Folder 配置相同
 
     该配置类下的所有数据库均会生成对应的INI文件
+
+    **类型检测为** tuple
+
+    **注意返回的是 str**
     """
-    ADM = ('core', 'assets', 'ADM.db')
+    ADM = ('core', 'assets', 'ADM.db')  #: 核心部分的数据库
 
     def get(self, key: str) -> str:
         return os.path.join(RunInfo.ADDRESS, *self.get_data()[str(key)])
@@ -656,9 +694,9 @@ Dump.new('DBToINIAddress', DBToINIAddress)
 
 class _INIConnect(Conf):
     """
-    储存全局可用的INI文件读取对象
+    储存全局可用的 INI文件 读取对象
 
-    类型检测为 ConfigParser 类，其为 configparser模块 的父类
+    **类型检测为** :class:`configparser.ConfigParser`
     """
     pass
 
@@ -670,9 +708,9 @@ Dump.new('INIConnect', INIConnect)
 
 class _DBConnect(Conf):
     """
-    储存全局可用的Database文件读取对象
+    储存全局可用的 Database文件 读取对象
 
-    类型检测为 Connection 类
+    **类型检测为** :class:`sqlite3.Connection`
     """
     pass
 
@@ -689,7 +727,7 @@ class _LogName(Conf):
     仅储存于项目默认 log文件夹 下的日志名称需要记录，
     位于其他地点的不由 core 进行管理
 
-    类型检测为 str
+    **类型检测为** str
     """
     pass
 
