@@ -1,5 +1,3 @@
-# Anime Database Manager (ADM)
-
 <div align="center">
     <div>
         <img src="./mini_logo.png" alt="Logo"/>
@@ -34,7 +32,7 @@
     </div>
 </div>
 
----
+-----
 
 欢迎使用ADM项目！
 
@@ -57,7 +55,7 @@
 
 ## 快速上手
 
-点击[这里](https://Anime-Database-Manager.readthedocs.io/zh_CN/latest/)开始你的旅程吧！
+点击[这里](https://anime-database-manager.readthedocs.io/zh_CN/latest/)开始你的旅程吧！
 
 ## 开源协议
 
